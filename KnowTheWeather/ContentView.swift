@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isNight = false
+    
     var body: some View {
         ZStack{
-            BackgroundView(topColor:.blue, bottomColor: Color("lightBlue"))
-            
+            BackgroundView(isNight: $isNight)
             VStack(spacing:8){
                 CityTextView(cityName: "Cupertino CA")
-                MainWeatherView(imageName: "cloud.sun.fill", temp: 76)
+                MainWeatherView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill", temp: 76)
                 
                 HStack(spacing:20){
                     WeatherDayView(day: "MON", temp: 76, imageName: "sun.max.fill")
@@ -24,7 +25,11 @@ struct ContentView: View {
                     WeatherDayView(day: "FRI", temp: 60, imageName: "snow")
                 }
                Spacer()
-                ButtonView(buttontitle: "Change Day Time",backgroundColor: Color.white,textColor: Color.blue)
+                Button{
+                    isNight.toggle()
+                }label: {
+                    ButtonView(buttontitle: "Change Day Time",backgroundColor: Color.white,textColor: Color.blue)
+                }
                 Spacer()
             }
             .padding()
@@ -57,10 +62,10 @@ struct WeatherDayView: View {
 }
 
 struct BackgroundView: View {
-    var topColor : Color
-    var bottomColor : Color
+    
+    @Binding var isNight : Bool
     var body: some View {
-        LinearGradient(gradient: Gradient(colors: [topColor,bottomColor]), startPoint: .topLeading, endPoint: .bottomTrailing)
+        LinearGradient(gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : Color("lightBlue")]), startPoint: .topLeading, endPoint: .bottomTrailing)
             .edgesIgnoringSafeArea(.all)
     }
 }
@@ -76,6 +81,7 @@ struct CityTextView: View {
 }
 
 struct MainWeatherView: View {
+    
     var imageName : String
     var temp : Int
     var body: some View {
@@ -94,20 +100,4 @@ struct MainWeatherView: View {
     }
 }
 
-struct ButtonView: View {
-    var buttontitle : String
-    var backgroundColor : Color
-    var textColor: Color
-    var body: some View {
-        Button{
-            print("Tapped Me")
-        }label: {
-            Text(buttontitle)
-                .frame(width: 320,height: 50)
-                .background(backgroundColor)
-                .foregroundColor(textColor)
-                .font(.system(size: 20,weight: .bold,design: .default))
-                .cornerRadius(10)
-        }
-    }
-}
+
