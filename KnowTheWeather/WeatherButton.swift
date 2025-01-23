@@ -15,10 +15,13 @@ struct ButtonView: View {
        
             Text(buttontitle)
                 .frame(width: 320,height: 50)
-                .background(backgroundColor)
+                .background(backgroundColor.gradient)
                 .foregroundColor(textColor)
                 .font(.system(size: 20,weight: .bold,design: .default))
                 .cornerRadius(10)
         }
     }
 
+#Preview {
+    ButtonView(buttontitle: "Test Button", backgroundColor: .blue, textColor: .white)
+}
